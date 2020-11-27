@@ -21,16 +21,17 @@ public class MainActivity extends AppCompatActivity {
 
     public float prvPoint=0.0f, newPoint=1.0f, rate=1.0f;
     public TextView dagree;
-    public int i = 0;
+    public int i;
     public String str = "";
-    public String[] arr = {"1", "2", "3", "4", "5"};
+//    public String[] arr = {"1", "2", "3", "4", "5"};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         dagree = findViewById(R.id.tv_dagree);
         Button rotateBtn = findViewById(R.id.btn_R);
-        ImageView myImageView = (ImageView)findViewById(R.id.iv_c);
+//        ImageView ivCircle = (ImageView)findViewById(R.id.iv_c);
+        ImageView ivLine = (ImageView)findViewById(R.id.iv_l);
         Handler mHandler = new Handler();
 
         AnimationSet animSet = new AnimationSet(true);
@@ -41,12 +42,11 @@ public class MainActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                for(int i=0;i<61;i++) {
-
+                for(int i=0;i<61;) {
+                    Log.d("TAG", "run: " + i);
 
                     try {
                         Thread.sleep(1000);
-
                         mHandler.post(new Runnable() {
 
                             @Override
@@ -55,10 +55,12 @@ public class MainActivity extends AppCompatActivity {
                                 final RotateAnimation animRotate = new RotateAnimation(prvPoint, newPoint,
                                         RotateAnimation.RELATIVE_TO_SELF, 0.5f,
                                         RotateAnimation.RELATIVE_TO_SELF, 0.5f);
+                                Log.d("TAG", "run: " + " : " + prvPoint + "->" + newPoint);
                                 newPoint = counter(newPoint);
 
                                 animSet.addAnimation(animRotate);
-                                myImageView.startAnimation(animSet);
+//                                ivCircle.startAnimation(animSet);
+                                ivLine.startAnimation(animSet);
                             }
                         });
                     } catch (Exception e) {
@@ -86,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
     private float counter(float currPoint) {
+        i = i++;
         prvPoint = currPoint;
         str = Float.toString(prvPoint);
         dagree.setText(Float.toString(prvPoint));
