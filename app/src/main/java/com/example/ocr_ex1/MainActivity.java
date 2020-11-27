@@ -23,7 +23,11 @@ public class MainActivity extends AppCompatActivity {
     public TextView dagree;
     public int i;
     public String str = "";
-//    public String[] arr = {"1", "2", "3", "4", "5"};
+    public boolean flag = false;
+    public AnimationSet animSet;
+    public  ImageView ivLine;
+    public Handler mHandler;
+    //    public String[] arr = {"1", "2", "3", "4", "5"};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,20 +35,47 @@ public class MainActivity extends AppCompatActivity {
         dagree = findViewById(R.id.tv_dagree);
         Button rotateBtn = findViewById(R.id.btn_R);
 //        ImageView ivCircle = (ImageView)findViewById(R.id.iv_c);
-        ImageView ivLine = (ImageView)findViewById(R.id.iv_l);
-        Handler mHandler = new Handler();
+        ivLine = (ImageView)findViewById(R.id.iv_l);
+        mHandler = new Handler();
 
-        AnimationSet animSet = new AnimationSet(true);
+        animSet = new AnimationSet(true);
         animSet.setInterpolator(new DecelerateInterpolator());
         animSet.setFillAfter(true);
         animSet.setFillEnabled(true);
 
+        test();
+
+
+
+        rotateBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+            switch (Boolean.toString(flag)) {
+                case "true" :
+                    flag = false;
+                    test();
+                    break;
+                case "false" :
+                    flag = true;
+                    break;
+            }
+            }
+        });
+    }
+    private float counter(float currPoint) {
+
+        prvPoint = currPoint;
+        str = Float.toString(prvPoint);
+        dagree.setText(Float.toString(prvPoint));
+        return currPoint + rate;
+    }
+    private void test () {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                for(int i=0;i<61;) {
+                for(i=0;;i++) {
                     Log.d("TAG", "run: " + i);
-
+                    if (flag) { break;}
                     try {
                         Thread.sleep(1000);
                         mHandler.post(new Runnable() {
@@ -52,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 // TODO Auto-generated method stub
-                                final RotateAnimation animRotate = new RotateAnimation(prvPoint, newPoint,
+                                final RotateAnimation animRotate = new RotateAnimation(0.0f, 6.0f,
                                         RotateAnimation.RELATIVE_TO_SELF, 0.5f,
                                         RotateAnimation.RELATIVE_TO_SELF, 0.5f);
                                 Log.d("TAG", "run: " + " : " + prvPoint + "->" + newPoint);
@@ -69,30 +100,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }).start();
-
-
-
-        rotateBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                final RotateAnimation animRotate = new RotateAnimation(prvPoint, newPoint,
-//                        RotateAnimation.RELATIVE_TO_SELF, 0.5f,
-//                        RotateAnimation.RELATIVE_TO_SELF, 0.5f);
-//                newPoint = counter(newPoint);
-//
-////                animRotate.setDuration(10);
-////                animRotate.setFillAfter(true);
-//                animSet.addAnimation(animRotate);
-//                myImageView.startAnimation(animSet);
-            }
-        });
-    }
-    private float counter(float currPoint) {
-        i = i++;
-        prvPoint = currPoint;
-        str = Float.toString(prvPoint);
-        dagree.setText(Float.toString(prvPoint));
-        return currPoint + rate;
     }
 
 
